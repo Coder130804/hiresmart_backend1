@@ -52,38 +52,5 @@ router.post('/session', authMiddleware, async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
-// 📤 Get AI feedback
-router.get('/ai-feedback', authMiddleware, async (req, res) => {
-  try {
-    const userId = req.user.id;
-
-    const interviews = await Interview.find({ userId });
-
-    if (!interviews || interviews.length === 0) {
-      return res.status(404).json({ success: false, message: 'No interview responses found.' });
-    }
-
-    // 🧠 Simulated AI feedback logic (replace with your real logic later)
-    const results = interviews.map((item, idx) => ({
-      question: item.question,
-      transcript: "Simulated transcript",
-      matchedKeywords: ["example", "keywords"],
-      score: 1 // Assuming 1 per question
-    }));
-
-    const totalScore = results.reduce((acc, r) => acc + r.score, 0);
-
-    res.json({
-      success: true,
-      results,
-      totalScore,
-      summary: `Great job! You scored ${totalScore} out of ${results.length}.`
-    });
-
-  } catch (err) {
-    console.error('AI feedback error:', err.message);
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
 
 module.exports = router;
